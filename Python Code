@@ -1,0 +1,67 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+import pandas as pd
+from scipy.fft import fft, fftfreq
+from scipy.fft import rfft, rfftfreq
+file_path = "/Users/jacobjoseph/Downloads/Lab #5 Data.csv"
+df = pd.read_csv(file_path, header=None, names=['t_ms', 'A_0','A_0LP'])
+t_ms = df['t_ms'].values
+A_0 = df['A_0'].values
+A_0LP = df['A_0LP'].values
+t_s = t_ms/1000
+
+
+fig,ax = plt.subplots()
+ax.plot(t_s, A_0)
+ax.set_xlabel('Time')
+ax.set_ylabel('Amplitude')
+plt.show()
+
+
+fig,ax = plt.subplots()
+ax.plot(t_s, A_0LP)
+ax.set_xlabel('Time')
+ax.set_ylabel('Amplitude')
+plt.show()
+
+
+SAMPLE_RATE = 1000            
+
+
+
+
+SAMPLE_RATE = 1000
+N = len(A_0LP)
+yf_lp = fft(A_0LP)
+xf_lp = fftfreq(N, 1 / SAMPLE_RATE)
+
+
+
+
+M = len(A_0)
+yf_sq = fft(A_0)
+xf_sq = fftfreq(M, 1 / SAMPLE_RATE)
+
+
+
+
+fig, ax = plt.subplots()
+ax.plot(xf_sq, np.abs(yf_sq), color='red', label='Square Wave')
+ax.plot(xf_lp, np.abs(yf_lp), color='blue', label='Low Pass')
+
+
+ax.set_xlabel('Frequency (Hz)')
+ax.set_ylabel('Amplitude')
+ax.set_title('FFT Comparison')
+ax.set_ylim(0,75000)
+ax.set_xlim(0,500)
+
+
+
+
+ax.grid()
+ax.legend()
+
+
+plt.show()
